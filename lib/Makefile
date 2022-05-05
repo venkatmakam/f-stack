@@ -324,8 +324,7 @@ LIBKERN_SRCS+=		 \
 	jenkins_hash.c   \
 	strlcpy.c	 \
 	strnlen.c        \
-	fls.c		 \
-	flsl.c
+	
 else
 LIBKERN_SRCS+=		 \
 	bcd.c		 \
