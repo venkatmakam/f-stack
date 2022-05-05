@@ -79,7 +79,7 @@ zlibwrapper: lib
 ## test: run long-duration tests
 .PHONY: test
 DEBUGLEVEL ?= 1
-test: MOREFLAGS += -g -Werror
+test: MOREFLAGS += -g
 test:
 	DEBUGLEVEL=$(DEBUGLEVEL) MOREFLAGS="$(MOREFLAGS)" $(MAKE) -j -C $(PRGDIR) allVariants
 	$(MAKE) -C $(TESTDIR) $@
@@ -197,38 +197,38 @@ travis-install:
 .PHONY: gcc5build
 gcc5build: clean
 	gcc-5 -v
-	CC=gcc-5 $(MAKE) all MOREFLAGS="-Werror"
+	CC=gcc-5 $(MAKE) all MOREFLAGS="-"
 
 .PHONY: gcc6build
 gcc6build: clean
 	gcc-6 -v
-	CC=gcc-6 $(MAKE) all MOREFLAGS="-Werror"
+	CC=gcc-6 $(MAKE) all MOREFLAGS=""
 
 .PHONY: gcc7build
 gcc7build: clean
 	gcc-7 -v
-	CC=gcc-7 $(MAKE) all MOREFLAGS="-Werror"
+	CC=gcc-7 $(MAKE) all MOREFLAGS=""
 
 .PHONY: clangbuild
 clangbuild: clean
 	clang -v
-	CXX=clang++ CC=clang CFLAGS="-Werror -Wconversion -Wno-sign-conversion -Wdocumentation" $(MAKE) all
+	CXX=clang++ CC=clang CFLAGS="-Wconversion -Wno-sign-conversion -Wdocumentation" $(MAKE) all
 
 m32build: clean
 	gcc -v
 	$(MAKE) all32
 
 armbuild: clean
-	CC=arm-linux-gnueabi-gcc CFLAGS="-Werror" $(MAKE) allzstd
+	CC=arm-linux-gnueabi-gcc CFLAGS="" $(MAKE) allzstd
 
 aarch64build: clean
-	CC=aarch64-linux-gnu-gcc CFLAGS="-Werror" $(MAKE) allzstd
+	CC=aarch64-linux-gnu-gcc CFLAGS="" $(MAKE) allzstd
 
 ppcbuild: clean
-	CC=powerpc-linux-gnu-gcc CFLAGS="-m32 -Wno-attributes -Werror" $(MAKE) allzstd
+	CC=powerpc-linux-gnu-gcc CFLAGS="-m32 -Wno-attributes " $(MAKE) allzstd
 
 ppc64build: clean
-	CC=powerpc-linux-gnu-gcc CFLAGS="-m64 -Werror" $(MAKE) allzstd
+	CC=powerpc-linux-gnu-gcc CFLAGS="-m64 " $(MAKE) allzstd
 
 armfuzz: clean
 	CC=arm-linux-gnueabi-gcc QEMU_SYS=qemu-arm-static MOREFLAGS="-static" FUZZER_FLAGS=--no-big-tests $(MAKE) -C $(TESTDIR) fuzztest
@@ -244,38 +244,38 @@ ppc64fuzz: clean
 	CC=powerpc-linux-gnu-gcc QEMU_SYS=qemu-ppc64-static MOREFLAGS="-m64 -static" FUZZER_FLAGS=--no-big-tests $(MAKE) -C $(TESTDIR) fuzztest
 
 .PHONY: cxxtest
-cxxtest: CXXFLAGS += -Wall -Wextra -Wundef -Wshadow -Wcast-align -Werror
+cxxtest: CXXFLAGS += -Wall -Wextra -Wundef -Wshadow -Wcast-align
 cxxtest: clean
 	$(MAKE) -C $(PRGDIR) all CC="$(CXX) -Wno-deprecated" CFLAGS="$(CXXFLAGS)"   # adding -Wno-deprecated to avoid clang++ warning on dealing with C files directly
 
 gcc5test: clean
 	gcc-5 -v
-	$(MAKE) all CC=gcc-5 MOREFLAGS="-Werror"
+	$(MAKE) all CC=gcc-5 MOREFLAGS=""
 
 gcc6test: clean
 	gcc-6 -v
-	$(MAKE) all CC=gcc-6 MOREFLAGS="-Werror"
+	$(MAKE) all CC=gcc-6 MOREFLAGS=""
 
 armtest: clean
 	$(MAKE) -C $(TESTDIR) datagen   # use native, faster
-	$(MAKE) -C $(TESTDIR) test CC=arm-linux-gnueabi-gcc QEMU_SYS=qemu-arm-static ZSTDRTTEST= MOREFLAGS="-Werror -static" FUZZER_FLAGS=--no-big-tests
+	$(MAKE) -C $(TESTDIR) test CC=arm-linux-gnueabi-gcc QEMU_SYS=qemu-arm-static ZSTDRTTEST= MOREFLAGS="-static" FUZZER_FLAGS=--no-big-tests
 
 aarch64test:
 	$(MAKE) -C $(TESTDIR) datagen   # use native, faster
-	$(MAKE) -C $(TESTDIR) test CC=aarch64-linux-gnu-gcc QEMU_SYS=qemu-aarch64-static ZSTDRTTEST= MOREFLAGS="-Werror -static" FUZZER_FLAGS=--no-big-tests
+	$(MAKE) -C $(TESTDIR) test CC=aarch64-linux-gnu-gcc QEMU_SYS=qemu-aarch64-static ZSTDRTTEST= MOREFLAGS="-static" FUZZER_FLAGS=--no-big-tests
 
 ppctest: clean
 	$(MAKE) -C $(TESTDIR) datagen   # use native, faster
-	$(MAKE) -C $(TESTDIR) test CC=powerpc-linux-gnu-gcc QEMU_SYS=qemu-ppc-static ZSTDRTTEST= MOREFLAGS="-Werror -Wno-attributes -static" FUZZER_FLAGS=--no-big-tests
+	$(MAKE) -C $(TESTDIR) test CC=powerpc-linux-gnu-gcc QEMU_SYS=qemu-ppc-static ZSTDRTTEST= MOREFLAGS="-Wno-attributes -static" FUZZER_FLAGS=--no-big-tests
 
 ppc64test: clean
 	$(MAKE) -C $(TESTDIR) datagen   # use native, faster
 	$(MAKE) -C $(TESTDIR) test CC=powerpc-linux-gnu-gcc QEMU_SYS=qemu-ppc64-static ZSTDRTTEST= MOREFLAGS="-m64 -static" FUZZER_FLAGS=--no-big-tests
 
 arm-ppc-compilation:
-	$(MAKE) -C $(PRGDIR) clean zstd CC=arm-linux-gnueabi-gcc QEMU_SYS=qemu-arm-static ZSTDRTTEST= MOREFLAGS="-Werror -static"
-	$(MAKE) -C $(PRGDIR) clean zstd CC=aarch64-linux-gnu-gcc QEMU_SYS=qemu-aarch64-static ZSTDRTTEST= MOREFLAGS="-Werror -static"
-	$(MAKE) -C $(PRGDIR) clean zstd CC=powerpc-linux-gnu-gcc QEMU_SYS=qemu-ppc-static ZSTDRTTEST= MOREFLAGS="-Werror -Wno-attributes -static"
+	$(MAKE) -C $(PRGDIR) clean zstd CC=arm-linux-gnueabi-gcc QEMU_SYS=qemu-arm-static ZSTDRTTEST= MOREFLAGS="-static"
+	$(MAKE) -C $(PRGDIR) clean zstd CC=aarch64-linux-gnu-gcc QEMU_SYS=qemu-aarch64-static ZSTDRTTEST= MOREFLAGS="-static"
+	$(MAKE) -C $(PRGDIR) clean zstd CC=powerpc-linux-gnu-gcc QEMU_SYS=qemu-ppc-static ZSTDRTTEST= MOREFLAGS="-Wno-attributes -static"
 	$(MAKE) -C $(PRGDIR) clean zstd CC=powerpc-linux-gnu-gcc QEMU_SYS=qemu-ppc64-static ZSTDRTTEST= MOREFLAGS="-m64 -static"
 
 regressiontest:
@@ -292,31 +292,31 @@ msanregressiontest:
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63303
 
 usan: clean
-	$(MAKE) test CC=clang MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize-recover=signed-integer-overflow -fsanitize=undefined -Werror"
+	$(MAKE) test CC=clang MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize-recover=signed-integer-overflow -fsanitize=undefined"
 
 asan: clean
-	$(MAKE) test CC=clang MOREFLAGS="-g -fsanitize=address -Werror"
+	$(MAKE) test CC=clang MOREFLAGS="-g -fsanitize=address"
 
 asan-%: clean
-	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize=address -Werror" $(MAKE) -C $(TESTDIR) $*
+	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize=address" $(MAKE) -C $(TESTDIR) $*
 
 msan: clean
-	$(MAKE) test CC=clang MOREFLAGS="-g -fsanitize=memory -fno-omit-frame-pointer -Werror" HAVE_LZMA=0   # datagen.c fails this test for no obvious reason
+	$(MAKE) test CC=clang MOREFLAGS="-g -fsanitize=memory -fno-omit-frame-pointer " HAVE_LZMA=0   # datagen.c fails this test for no obvious reason
 
 msan-%: clean
-	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize=memory -fno-omit-frame-pointer -Werror" FUZZER_FLAGS=--no-big-tests $(MAKE) -C $(TESTDIR) HAVE_LZMA=0 $*
+	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize=memory -fno-omit-frame-pointer " FUZZER_FLAGS=--no-big-tests $(MAKE) -C $(TESTDIR) HAVE_LZMA=0 $*
 
 asan32: clean
 	$(MAKE) -C $(TESTDIR) test32 CC=clang MOREFLAGS="-g -fsanitize=address"
 
 uasan: clean
-	$(MAKE) test CC=clang MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize-recover=signed-integer-overflow -fsanitize=address,undefined -Werror"
+	$(MAKE) test CC=clang MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize-recover=signed-integer-overflow -fsanitize=address,undefined "
 
 uasan-%: clean
-	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize-recover=signed-integer-overflow -fsanitize=address,undefined -Werror" $(MAKE) -C $(TESTDIR) $*
+	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize-recover=signed-integer-overflow -fsanitize=address,undefined " $(MAKE) -C $(TESTDIR) $*
 
 tsan-%: clean
-	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize=thread -Werror" $(MAKE) -C $(TESTDIR) $* FUZZER_FLAGS=--no-big-tests
+	LDFLAGS=-fuse-ld=gold MOREFLAGS="-g -fno-sanitize-recover=all -fsanitize=thread " $(MAKE) -C $(TESTDIR) $* FUZZER_FLAGS=--no-big-tests
 
 apt-install:
 	sudo apt-get -yq --no-install-suggests --no-install-recommends --force-yes install $(APT_PACKAGES)
@@ -381,35 +381,35 @@ cmakebuild:
 
 c89build: clean
 	$(CC) -v
-	CFLAGS="-std=c89 -Werror" $(MAKE) allmost  # will fail, due to missing support for `long long`
+	CFLAGS="-std=c89 " $(MAKE) allmost  # will fail, due to missing support for `long long`
 
 gnu90build: clean
 	$(CC) -v
-	CFLAGS="-std=gnu90 -Werror" $(MAKE) allmost
+	CFLAGS="-std=gnu90 " $(MAKE) allmost
 
 c99build: clean
 	$(CC) -v
-	CFLAGS="-std=c99 -Werror" $(MAKE) allmost
+	CFLAGS="-std=c99 " $(MAKE) allmost
 
 gnu99build: clean
 	$(CC) -v
-	CFLAGS="-std=gnu99 -Werror" $(MAKE) allmost
+	CFLAGS="-std=gnu99 " $(MAKE) allmost
 
 c11build: clean
 	$(CC) -v
-	CFLAGS="-std=c11 -Werror" $(MAKE) allmost
+	CFLAGS="-std=c11 " $(MAKE) allmost
 
 bmix64build: clean
 	$(CC) -v
-	CFLAGS="-O3 -mbmi -Werror" $(MAKE) -C $(TESTDIR) test
+	CFLAGS="-O3 -mbmi " $(MAKE) -C $(TESTDIR) test
 
 bmix32build: clean
 	$(CC) -v
-	CFLAGS="-O3 -mbmi -mx32 -Werror" $(MAKE) -C $(TESTDIR) test
+	CFLAGS="-O3 -mbmi -mx32 " $(MAKE) -C $(TESTDIR) test
 
 bmi32build: clean
 	$(CC) -v
-	CFLAGS="-O3 -mbmi -m32 -Werror" $(MAKE) -C $(TESTDIR) test
+	CFLAGS="-O3 -mbmi -m32 " $(MAKE) -C $(TESTDIR) test
 
 # static analyzer test uses clang's scan-build
 # does not analyze zlibWrapper, due to detected issues in zlib source code

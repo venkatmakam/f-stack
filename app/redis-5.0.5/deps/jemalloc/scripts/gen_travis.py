@@ -93,7 +93,7 @@ for unusual_combination in unusual_combinations_to_test:
 
     # We get some spurious errors when -Warray-bounds is enabled.
     env_string = ('{} COMPILER_FLAGS="{}" CONFIGURE_FLAGS="{}" '
-	'EXTRA_CFLAGS="-Werror -Wno-array-bounds"').format(
+	'EXTRA_CFLAGS="-Wno-array-bounds"').format(
         compilers, " ".join(compiler_flags), " ".join(configure_flags))
 
     include_rows += '    - os: %s\n' % os

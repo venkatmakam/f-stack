@@ -13,7 +13,7 @@
 
 AC_PREREQ(2.2)
 AC_INIT([libxo], [1.4.0], [phil@juniper.net])
-AM_INIT_AUTOMAKE([-Wall -Werror foreign -Wno-portability])
+AM_INIT_AUTOMAKE([-Wall foreign -Wno-portability])
 
 # Support silent build rules.  Requires at least automake-1.11.
 # Disable with "configure --disable-silent-rules" or "make V=1"
@@ -111,7 +111,7 @@ if test "$GETTEXT_ENABLE" != "no"; then
   AC_MSG_CHECKING([gettext in ${GETTEXT_PREFIX}])
 
   _save_cflags="$CFLAGS"
-  CFLAGS="$CFLAGS -I${GETTEXT_PREFIX}/include -L${GETTEXT_PREFIX}/lib -Werror -lintl"
+  CFLAGS="$CFLAGS -I${GETTEXT_PREFIX}/include -L${GETTEXT_PREFIX}/lib -lintl"
   AC_LINK_IFELSE([AC_LANG_SOURCE([[#include <libintl.h>]
              [int main() {char *cp = dgettext(NULL, "xx"); return 0; }]])],
              [HAVE_GETTEXT=yes],
@@ -125,7 +125,7 @@ if test "$GETTEXT_ENABLE" != "no"; then
       AC_MSG_CHECKING([gettext in ${GETTEXT_PREFIX}])
 
       _save_cflags="$CFLAGS"
-      CFLAGS="$CFLAGS -I${GETTEXT_PREFIX}/include -L${GETTEXT_PREFIX}/lib -Werror -lintl"
+      CFLAGS="$CFLAGS -I${GETTEXT_PREFIX}/include -L${GETTEXT_PREFIX}/lib -lintl"
       AC_LINK_IFELSE([AC_LANG_SOURCE([[#include <libintl.h>]
                  [int main() {char *cp = dgettext(NULL, "xx"); return 0; }]])],
                  [HAVE_GETTEXT=yes],
@@ -140,7 +140,7 @@ if test "$GETTEXT_ENABLE" != "no"; then
       AC_MSG_CHECKING([gettext in ${GETTEXT_PREFIX}])
 
       _save_cflags="$CFLAGS"
-      CFLAGS="$CFLAGS -I${GETTEXT_PREFIX}/include -L${GETTEXT_PREFIX}/lib -Werror -lintl"
+      CFLAGS="$CFLAGS -I${GETTEXT_PREFIX}/include -L${GETTEXT_PREFIX}/lib -lintl"
       AC_LINK_IFELSE([AC_LANG_SOURCE([[#include <libintl.h>]
                  [int main() {char *cp = dgettext(NULL, "xx"); return 0; }]])],
                  [HAVE_GETTEXT=yes],

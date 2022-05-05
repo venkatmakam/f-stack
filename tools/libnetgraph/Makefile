@@ -16,7 +16,7 @@ SHLIB_MAJOR=	4
 
 PKGCONF ?= pkg-config
 
-DPDK_CFLAGS= -g -Wall -Werror $(shell $(PKGCONF) --cflags libdpdk)
+DPDK_CFLAGS= -g -Wall $(shell $(PKGCONF) --cflags libdpdk)
 
 CFLAGS+= ${DPDK_CFLAGS}
 CFLAGS+= -I${TOPDIR}/lib

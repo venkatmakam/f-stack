@@ -50,7 +50,7 @@ endif
 
 PKGCONF ?= pkg-config
 
-DPDK_CFLAGS= -Wall -Wno-deprecated-declarations -Werror $(shell $(PKGCONF) --cflags libdpdk)
+DPDK_CFLAGS= -Wall -Wno-deprecated-declarations $(shell $(PKGCONF) --cflags libdpdk)
 
 KERNPREINCLUDES:= ${INCLUDES}
 INCLUDES= -I${OVERRIDE_INCLUDES_ROOT} ${KERNPREINCLUDES}
@@ -100,7 +100,7 @@ ifdef FF_TCPHPTS
 CFLAGS+= -DTCPHPTS -DRATELIMIT
 endif
 
-HOST_C= ${CC} -c $(HOST_CFLAGS) ${HOST_INCLUDES} ${WERROR} ${PROF} $<
+HOST_C= ${CC} -c $(HOST_CFLAGS) ${HOST_INCLUDES} ${PROF} $<
 
 
 ifneq ($(filter amd64 i386,${MACHINE_CPUARCH}),)

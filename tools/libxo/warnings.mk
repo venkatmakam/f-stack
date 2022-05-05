@@ -18,7 +18,7 @@ LOW_WARNINGS?= ${MIN_WARNINGS} \
     -Wmissing-prototypes \
     -Wpointer-arith
 
-MEDIUM_WARNINGS?= ${LOW_WARNINGS} -Werror
+MEDIUM_WARNINGS?= ${LOW_WARNINGS}
 
 HIGH_WARNINGS?= ${MEDIUM_WARNINGS} \
     -Waggregate-return \

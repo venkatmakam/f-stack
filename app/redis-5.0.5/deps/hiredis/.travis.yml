@@ -23,9 +23,9 @@ addons:
     - valgrind
 
 env:
-    - CFLAGS="-Werror"
+    - CFLAGS=""
     - PRE="valgrind --track-origins=yes --leak-check=full"
-    - TARGET="32bit" TARGET_VARS="32bit-vars" CFLAGS="-Werror"
+    - TARGET="32bit" TARGET_VARS="32bit-vars" CFLAGS=""
     - TARGET="32bit" TARGET_VARS="32bit-vars" PRE="valgrind --track-origins=yes --leak-check=full"
 
 matrix:

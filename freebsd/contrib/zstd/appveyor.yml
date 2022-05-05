@@ -26,7 +26,7 @@
     - COMPILER: "clang"
       HOST:     "mingw"
       PLATFORM: "x64"
-      SCRIPT:   "MOREFLAGS='--target=x86_64-w64-mingw32 -Werror -Wconversion -Wno-sign-conversion' make allzstd"
+      SCRIPT:   "MOREFLAGS='--target=x86_64-w64-mingw32 -Wconversion -Wno-sign-conversion' make allzstd"
       BUILD:    "true"
 
     - COMPILER: "gcc"
@@ -196,15 +196,15 @@
     - COMPILER: "gcc"
       HOST:     "mingw"
       PLATFORM: "x64"
-      SCRIPT:   "CFLAGS=-Werror make -j allzstd DEBUGLEVEL=2"
+      SCRIPT:   "CFLAGS=make -j allzstd DEBUGLEVEL=2"
     - COMPILER: "gcc"
       HOST:     "mingw"
       PLATFORM: "x86"
-      SCRIPT:   "CFLAGS=-Werror make -j allzstd"
+      SCRIPT:   "CFLAGS=make -j allzstd"
     - COMPILER: "clang"
       HOST:     "mingw"
       PLATFORM: "x64"
-      SCRIPT:   "CFLAGS='--target=x86_64-w64-mingw32 -Werror -Wconversion -Wno-sign-conversion' make -j allzstd"
+      SCRIPT:   "CFLAGS='--target=x86_64-w64-mingw32 -Wconversion -Wno-sign-conversion' make -j allzstd"
 
     - COMPILER: "visual"
       HOST:     "visual"
@@ -252,7 +252,7 @@
       C:\cygwin64\bin\bash --login -c "
         set -e;
         cd build/cmake;
-        CFLAGS='-Werror' cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE=Debug -DZSTD_BUILD_TESTS:BOOL=ON -DZSTD_FUZZER_FLAGS=-T30s -DZSTD_ZSTREAM_FLAGS=-T30s .;
+        CFLAGS='' cmake -G 'Unix Makefiles' -DCMAKE_BUILD_TYPE=Debug -DZSTD_BUILD_TESTS:BOOL=ON -DZSTD_FUZZER_FLAGS=-T30s -DZSTD_ZSTREAM_FLAGS=-T30s .;
         make -j4;
         ctest -V -L Medium;
       "

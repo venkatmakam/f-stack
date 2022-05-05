@@ -521,7 +521,7 @@ AC_DEFUN([ZFS_LINUX_CONFTEST_MAKEFILE], [
 # Example command line to manually build source
 # make modules -C $LINUX_OBJ $ARCH_UM M=$PWD/build/$1
 
-ccflags-y := -Werror $FRAME_LARGER_THAN
+ccflags-y := $FRAME_LARGER_THAN
 _ACEOF
 
 	dnl # Additional custom CFLAGS as requested.
